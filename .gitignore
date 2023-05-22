@@ -1,0 +1,9 @@
+.vs
+.idea
+.vscode
+
+*.pt
+*.pth
+data/test
+data/train
+buildings-seg/

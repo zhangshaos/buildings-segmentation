@@ -1,0 +1,7 @@
+path: 'E:\Py_Projects\buildings-instance-segment\data'
+train: 'train'
+val: 'test'
+test: 'test'
+
+nc: 4
+names: ['sky', 'ground', 'building', 'other']
