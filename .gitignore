@@ -4,6 +4,8 @@
 
 *.pt
 *.pth
+*.cache
 data/test
 data/train
 buildings-seg/
+runs/

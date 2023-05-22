@@ -1,12 +1,13 @@
+import os
 from ultralytics import YOLO
 
 
 if __name__ == '__main__':
+    os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
     model = YOLO('yolov8n-seg.pt')
-    model.train(model='yolov8n-seg.pt',
-                data='./data/sz_dataset.yaml',
-                epochs=3,
-                imgsz=640,
+    model.train(data='./data/sz_dataset.yaml',
+                epochs=10,
+                imgsz=(640,480),
                 save=True,
                 device=0,
                 project='buildings-seg',

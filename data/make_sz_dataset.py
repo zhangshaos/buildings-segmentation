@@ -9,8 +9,8 @@ Ground_RGB = np.array([153, 108, 6], dtype=np.uint8)
 Sky_RGB = np.array([0, 0, 0], dtype=np.uint8)
 
 
-def make_dataset_from_copying(src_dir: str, dst_dir: str, mode='train',
-                              vis_contour=True, min_box_len=0.02):
+def create_dataset(src_dir: str, dst_dir: str, mode='train',
+                   copy_img=True, vis_contour=True, min_box_len=0.02):
     prefix_dir = f'{src_dir}/{mode}'
     output_prefix_dir = f'{dst_dir}/{mode}'
     print(f'source directory is {prefix_dir}\n'
@@ -23,8 +23,9 @@ def make_dataset_from_copying(src_dir: str, dst_dir: str, mode='train',
         img_name = f'{prefix_dir}/{img_ind}_scene.png'
         if not os.path.exists(img_name):
             break
-        output_img_name = f'{output_prefix_dir}/{img_ind}_scene.png'
-        shutil.copyfile(img_name, output_img_name)
+        if copy_img:
+            output_img_name = f'{output_prefix_dir}/{img_ind}_scene.png'
+            shutil.copyfile(img_name, output_img_name)
         # 创建物体label文件
         label_content = []
         seg_name = f'{prefix_dir}/{img_ind}_seg.png'
@@ -54,17 +55,17 @@ def make_dataset_from_copying(src_dir: str, dst_dir: str, mode='train',
                     # 过滤掉太小的东西
                     continue
                 if np.all(rgb == Sky_RGB):
-                    label_line = f'0 '
+                    label_line = f'0'
                 elif np.all(rgb == Ground_RGB):
-                    label_line = f'1 '
+                    label_line = f'1'
                 else:
-                    label_line = f'2 '
+                    label_line = f'2'
                 n, _, _ = contour.shape
                 for i in range(n):
                     x, y = contour[i, 0, 0], contour[i, 0, 1]
                     x /= W
                     y /= H
-                    label_line += f'{x:.8f} {y:.8f}'
+                    label_line += f' {x:.8f} {y:.8f}'
                 label_content.append(label_line)
         # 创建标签文件
         output_label_name = f'{output_prefix_dir}/{img_ind}_scene.txt'
@@ -77,6 +78,6 @@ def make_dataset_from_copying(src_dir: str, dst_dir: str, mode='train',
 
 if __name__ == '__main__':
     src_dir = r'E:\Py_Projects\estimate-surface-normal-uncertainty\data_split'
-    make_dataset_from_copying(src_dir, '.', 'train', False)
-    make_dataset_from_copying(src_dir, '.', 'test', False)
+    create_dataset(src_dir, '.', 'train', False, False)
+    create_dataset(src_dir, '.', 'test', False, False)
     pass
